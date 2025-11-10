@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ladybug Hosting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if settings.background_song_url %}
+    <audio autoplay loop>
+        <source src="{{ settings.background_song_url }}" type="audio/mpeg">
+    </audio>
+    {% endif %}
+
+    <div class="container">
+        <header>
+            {% if settings.logo_url %}
+            <img src="{{ settings.logo_url }}" alt="Logo" class="logo">
+            {% else %}
+            <h1>🐞 Ladybug Bot Hosting</h1>
+            {% endif %}
+            <div class="user-info">
+                <span>Welcome, {{ user.username }}!</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-small">Logout</a>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="dashboard">
+            <div class="stats-card">
+                <h3>💰 Your Coins</h3>
+                <p class="big-number">{{ user.coins }}</p>
+            </div>
+
+            {% if server %}
+            <div class="server-info">
+                <h3>Your Current Server</h3>
+                <div class="server-card active">
+                    <h4>{{ server.name }}</h4>
+                    <p><strong>URL:</strong> <a href="{{ server.server_url }}" target="_blank">{{ server.server_url }}</a></p>
+                    <p><strong>Type:</strong> {{ server.server_type.replace('_', ' ').title() }}</p>
+                    <p><strong>Status:</strong> <span class="status-active">Active</span></p>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                <p>No server allocated. Please wait for a free server or purchase a premium server.</p>
+            </div>
+            {% endif %}
+
+            <div class="available-servers">
+                <h3>Available Servers</h3>
+                <div class="servers-grid">
+                    {% for srv in [] %}
+                    <!-- Servers would be listed here -->
+                    {% endfor %}
+                    <p class="text-muted">Contact admin to view available premium servers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function purchaseServer(serverId) {
+        if (confirm('Are you sure you want to purchase this server?')) {
+            fetch('/purchase_server/' + serverId, {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        }
+    }
+    </script>
+</body>
+</html>
