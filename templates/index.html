@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ladybug Bot Hosting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% if settings.background_song_url %}
+    <audio autoplay loop>
+        <source src="{{ settings.background_song_url }}" type="audio/mpeg">
+    </audio>
+    {% endif %}
+
+    <div class="container">
+        <header>
+            {% if settings.logo_url %}
+            <img src="{{ settings.logo_url }}" alt="Logo" class="logo">
+            {% else %}
+            <h1>🐞 Ladybug Bot Hosting</h1>
+            {% endif %}
+        </header>
+
+        <div class="hero">
+            <h2>Welcome to Ladybug Bot Hosting</h2>
+            <p>Host your bots with ease using SillyDev infrastructure</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+                <a href="{{ url_for('register') }}" class="btn btn-secondary">Register</a>
+            </div>
+            <div style="margin-top: 20px;">
+                <a href="{{ url_for('admin_login') }}" class="admin-link">Admin Panel</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>🚀 Free Servers</h3>
+                <p>Start with 100 free coins</p>
+            </div>
+            <div class="feature">
+                <h3>💎 Premium Plans</h3>
+                <p>$5, $10, $15 options</p>
+            </div>
+            <div class="feature">
+                <h3>⚡ Instant Access</h3>
+                <p>Auto-allocated servers</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
